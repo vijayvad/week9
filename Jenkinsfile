@@ -24,10 +24,15 @@ podTemplate(yaml: '''
 	chmod +x gradlew
         ./kubectl apply -f calculator.yaml -n staging
         ./kubectl apply -f hazelcast.yaml -n staging
-	sleep 30
-        ./gradlew smokeTest -Dcalculator.url=http://calculator-service.staging.svc.cluster.local:8080
-        '''
+	        '''
        } 
+ stage("Test using Curl Command") {
+		sh '''
+                echo 'Test using Curl'
+				test $(curl calculator-service.staging.svc.cluster.local:8080/sum?a=6\\&b=2) -eq 8 && echo 'pass' || 'fail'
+				test $(curl calculator-service.staging.svc.cluster.local:8080/div?a=6\\&b=6) -eq 1 && echo 'pass' || 'fail'
+         '''
+            }
      }
     }        
   }
