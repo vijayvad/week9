@@ -23,6 +23,8 @@ podTemplate(yaml: '''
         chmod +x ./kubectl
         ./kubectl apply -f calculator.yaml -n staging
         ./kubectl apply -f hazelcast.yaml -n staging
+	sleep 30
+        ./gradlew smokeTest -Dcalculator.url=http://calculator-service.staging.svc.cluster.local:8080
         '''
        } 
      }
