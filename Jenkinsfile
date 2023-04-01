@@ -14,7 +14,7 @@ podTemplate(yaml: '''
           mountPath: /mnt
       - name: cloud-sdk
         image: google/cloud-sdk
-      command:
+        command:
         - sleep
         args:
         - 9999999
@@ -39,32 +39,31 @@ podTemplate(yaml: '''
       git branch: 'main', url: 'https://github.com/vijayvad/week9.git'
       stage('Start a gradle project') {
       container('gradle') {
-        stage('Smoke Test Calculator') {
+        stage('Smoke Test') {
             sh '''
         echo 'Smoke Test Calculator in Staging'
                 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
         chmod +x ./kubectl
-        chmod +x gradlew
         ./kubectl apply -f calculator.yaml -n staging
         ./kubectl apply -f hazelcast.yaml -n staging
-        sleep 30
+        sleep 15
         ./gradlew smokeTest -Dcalculator.url=http://calculator-service.staging.svc.cluster.local:8080
         '''
         }
       }
       }
-      stage('Deploy to Cloud') {
+      stage('Cloud Deployment') {
       container('cloud-sdk') {
-        stage('Deploy to Google cluster') {
+        stage('Deploy to Google Cluster') {
           sh '''
-         echo 'Deploying to google cluster'
+         echo 'Deploying to Google Cluster'
          gcloud auth login --cred-file=$GOOGLE_APPLICATION_CREDENTIALS
-         gcloud config set project devops0001
-         gcloud container clusters get-credentials hello-cluster --region us-east1 --project devops0001
+         gcloud config set project week9-382002
+         gcloud container clusters get-credentials hello-cluster --region us-central1 --project argon-edge-374223
          echo 'namespaces in the prod environment'
          kubectl get ns
-         kubectl apply -f calculator.yaml
-         kubectl apply -f hazelcast.yaml
+         kubectl apply -f calculator.yaml -n devops-tools
+         kubectl apply -f hazelcast.yaml -n devops-tools
          '''
         }
       }
