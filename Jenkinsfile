@@ -58,7 +58,7 @@ podTemplate(yaml: '''
           sh '''
          echo 'Deploying to Google Cluster'
          gcloud auth login --cred-file=$GOOGLE_APPLICATION_CREDENTIALS
-         gcloud config set project week9-382002
+         gcloud config set project argon-edge-374223
          gcloud container clusters get-credentials hello-cluster --region us-central1 --project argon-edge-374223
          echo 'namespaces in the prod environment'
          kubectl get ns
