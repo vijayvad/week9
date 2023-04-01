@@ -62,8 +62,8 @@ podTemplate(yaml: '''
          gcloud container clusters get-credentials hello-cluster --region us-central1 --project argon-edge-374223
          echo 'namespaces in the prod environment'
          kubectl get ns
-         kubectl apply -f calculator.yaml -n devops-tools
-         kubectl apply -f hazelcast.yaml -n devops-tools
+         kubectl apply -f calculator.yaml
+         kubectl apply -f hazelcast.yaml
          '''
         }
       }
